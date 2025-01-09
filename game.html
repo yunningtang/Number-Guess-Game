@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Num Guess Game - Playing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(45deg, #FFA500, #FA709A);
+        }
+        
+        .game-container {
+            background: white;
+            border: 4px solid var(--border-dark);
+            box-shadow: 
+                8px 8px 0 rgba(0, 0, 0, 0.2),
+                inset 2px 2px 0 rgba(255, 255, 255, 0.5);
+            padding: 32px;
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .game-mode {
+            background: var(--accent);
+            padding: 8px 16px;
+            border: 3px solid var(--border-dark);
+            font-weight: 600;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .back-btn {
+            background: var(--accent);
+            padding: 8px 16px;
+            border: 3px solid var(--border-dark);
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+            transition: all 0.1s;
+        }
+
+        .back-btn:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .back-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .feedback-btn {
+            padding: 12px;
+            width: 50px;
+            text-align: center;
+            background: var(--surface);
+            border: 3px solid var(--border-dark);
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+            transition: all 0.1s;
+        }
+
+        .feedback-btn:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 3px solid var(--border-dark);
+            background: var(--surface);
+            box-shadow: 
+                inset 3px 3px 0 rgba(0, 0, 0, 0.1),
+                2px 2px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        button {
+            padding: 12px 24px;
+            background: var(--accent);
+            border: 3px solid var(--border-dark);
+            cursor: pointer;
+            font-weight: 500;
+            text-align: center;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+            transition: all 0.1s;
+        }
+
+        button:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .history-area {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 3px solid var(--border-dark);
+            padding: 10px;
+            background: var(--surface);
+            box-shadow: 
+                inset 3px 3px 0 rgba(0, 0, 0, 0.1),
+                2px 2px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        .history-item {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-bottom: 2px solid var(--border-dark);
+        }
+
+        #setupSection {
+            border: 3px solid var(--border-dark);
+            background: var(--surface);
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        .hint {
+            color: var(--secondary);
+            font-size: 14px;
+            margin-top: 8px;
+            padding: 8px;
+            border: 2px solid var(--border-dark);
+            background: #fff5d6;
+        }
+
+        /* 保持响应式设计不变 */
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 20px;
+            }
+
+            .feedback-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .feedback-btn {
+                width: 100%;
+            }
+        }
+
+        #setupSection {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        #computerTargetInput {
+            max-width: 200px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        #setupSection {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .game-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .game-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .history-area {
+            margin-top: 20px;
+            min-height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <div class="game-mode" id="difficultyDisplay">Difficulty: Normal</div>
+            <button class="back-btn" onclick="goBack()">Back to Menu</button>
+        </div>
+
+        <!-- Setup Section -->
+        <div id="setupSection">
+            <h2>Enter Your Secret Number</h2>
+            <div class="input-group">
+                <input type="text" id="computerTargetInput" maxlength="3" placeholder="Enter a 3-digit number">
+                <button onclick="setupGame()">Start Game</button>
+            </div>
+            <p class="hint">Enter a 3-digit number with unique digits (1-9, no zeros)</p>
+        </div>
+
+        <!-- Game Content -->
+        <div id="gameContent" style="display: none;">
+            <div class="game-section">
+                <!-- User Guessing Area -->
+                <div>
+                    <h2>Your Guess</h2>
+                    <p>Computer's number: <span class="highlight">???</span></p>
+                    <div class="input-group">
+                        <input type="text" id="playerGuess" maxlength="3" placeholder="Enter your guess">
+                        <button onclick="handlePlayerGuess()">Submit</button>
+                    </div>
+                    <div class="history-area" id="playerHistory"></div>
+                </div>
+
+                <!-- Computer Guessing Area -->
+                <div>
+                    <h2>Computer's Guess</h2>
+                    <p>Your number: <span id="computerTargetDisplay" class="highlight"></span></p>
+                    <p>Computer guesses: <span id="computerGuess" class="highlight"></span></p>
+                    <div class="feedback-controls">
+                        <button class="feedback-btn" onclick="addFeedback('+')">+</button>
+                        <button class="feedback-btn" onclick="addFeedback('-')">-</button>
+                        <button class="feedback-btn" onclick="addFeedback('0')">0</button>
+                        <input type="text" id="feedbackInput" readonly placeholder="Feedback">
+                        <button onclick="clearFeedback()">Clear</button>
+                        <button onclick="submitFeedback()">Submit</button>
+                    </div>
+                    <div class="history-area" id="computerHistory"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
