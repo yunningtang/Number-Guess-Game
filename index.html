@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head> 
+   <title>Number Guess Game </title>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+   <link href="style.css" rel="stylesheet">
+   <style>
+       :root {
+           --primary: #000000;
+           --secondary: #757575;
+           --accent: #FFE162;
+           --background: #FFFFFF;
+           --surface: #F5F5F5;
+       }
+
+       * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+           font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+       }
+
+       body {
+           background: var(--background);
+           min-height: 100vh;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           padding: 20px;
+       }
+
+       .container {
+           width: 100%;
+           max-width: 800px;
+           padding: 40px;
+       }
+
+       /* Header */
+       .header {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           margin-bottom: 40px;
+       }
+
+       .logo {
+           display: flex;
+           align-items: center;
+           gap: 16px;
+       }
+
+       .logo-icon {
+           width: 48px;
+           height: 48px;
+           background: var(--accent);
+           border-radius: 12px;
+       }
+
+       .help-icon {
+           width: 32px;
+           height: 32px;
+           border-radius: 50%;
+           background: var(--surface);
+           display: grid;
+           place-items: center;
+           cursor: pointer;
+       }
+
+       /* Game Info */
+       .game-info {
+           background: var(--surface);
+           padding: 24px;
+           border-radius: 16px;
+           margin-bottom: 40px;
+       }
+
+       .rules {
+           display: grid;
+           gap: 16px;
+           margin-top: 16px;
+       }
+
+       /* Difficulty Cards */
+       .difficulty-section {
+           margin-bottom: 40px;
+       }
+
+       .difficulty-cards {
+           display: grid;
+           grid-template-columns: repeat(3, 1fr);
+           gap: 24px;
+           margin-top: 24px;
+       }
+
+       .difficulty-card {
+           background: var(--surface);
+           padding: 24px;
+           border-radius: 16px;
+           cursor: pointer;
+           text-align: center;
+           transition: transform 0.2s, background-color 0.2s;
+       }
+
+       .difficulty-card:hover {
+           transform: translateY(-4px);
+       }
+
+       .difficulty-card.selected {
+           background: var(--accent);
+           color: var(--primary);
+       }
+
+       /* Start Button */
+       .start-button {
+           width: 100%;
+           padding: 16px;
+           background: var(--accent);
+           border: none;
+           border-radius: 12px;
+           font-size: 18px;
+           font-weight: 500;
+           cursor: pointer;
+           transition: transform 0.2s;
+       }
+
+       .start-button:hover {
+           transform: translateY(-4px);
+       }
+
+       /* Modal */
+       .modal {
+           display: none;
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background: rgba(0,0,0,0.5);
+       }
+
+       .modal-content {
+           background: white;
+           padding: 32px;
+           border-radius: 16px;
+           max-width: 500px;
+           margin: 100px auto;
+       }
+
+       /* Typography */
+       h1 {
+           font-size: 32px;
+           font-weight: 600;
+       }
+
+       h2 {
+           font-size: 20px;
+           font-weight: 500;
+           margin-bottom: 16px;
+       }
+
+       .rule-title {
+           font-weight: 600;
+           margin-bottom: 8px;
+       }
+
+       @media (max-width: 768px) {
+           .difficulty-cards {
+               grid-template-columns: 1fr;
+           }
+       }
+   </style>
+</head>
+<body>
+   <div class="container">
+       <!-- Header -->
+       <div class="header">
+           <div class="logo">
+               <img src="https://bloximages.newyork1.vip.townnews.com/oudaily.com/content/tncms/assets/v3/editorial/d/fb/dfbb369c-a1cb-11e6-8c01-fffaeeab0af7/581b406283faa.image.jpg" class="logo-icon" alt="Inf313">
+               <h1>👁️‍🗨 Guess the Secret Number! </h1>
+           </div>
+           <div class="help-icon" onclick="showRules()">?</div>
+       </div>
+
+       <!-- Game Info -->
+       <div class="game-info">
+           <h3>Objective</h3>
+           <p> - INF313 - Computertational Reasoning </p>
+           <p> - Prof. Nada Almasri </p>
+           <p> - University of Toronto </p>
+           <p> - Faculty of Information</p>
+           <p> - Group 3</p>
+           <div class="rules">
+               <div class="rule">
+                   <div class="rule-title">Game Rules</div>
+                   <p>❗ Guess the computer's secret three-digit number before it guesses yours. </p>
+                   <p>❗ Both numbers have unique digits and no zeros.</p>
+               </div>
+               <div class="rule">
+                   <div class="rule-title">How to Play</div>
+                   <p>1️⃣: You and the computer take turns guessing each other's secret number.</p>
+                   <p>2️⃣: You both get up to seven attempts.</p>
+                   <p>3️⃣: After each guess, feedback is provided:</p>
+                   <p>  🔵 + : Correct digit and position. </p>
+                   <p>  ⚪️ - : Correct digit, wrong position. </p>
+                   <p>  🟠 0 : No correct digits. </p>
+                   <br></br>
+                   <div class="rule-title">🏆Winning Condition</div>
+                   <p>You win if you guess the computer's number in fewer tries than it guesses yours.</p>
+
+               </div>
+           </div>
+       </div>
+
+       <!-- Difficulty Selection -->
+       <div class="difficulty-section">
+           <h2>Select Difficulty</h2>
+           <div class="difficulty-cards">
+               <div class="difficulty-card" onclick="selectDifficulty('easy')">
+                   <h3>Easy</h3>
+               </div>
+               <div class="difficulty-card" onclick="selectDifficulty('normal')">
+                   <h3>Normal</h3>
+               </div>
+               <div class="difficulty-card" onclick="selectDifficulty('hard')">
+                   <h3>Hard</h3>
+               </div>
+           </div>
+       </div>
+
+       <!-- Start Button -->
+       <button class="start-button" onclick="startGame()">Start Game</button>
+   </div>
+
+   <!-- Rules Modal -->
+   <div id="rulesModal" class="modal">
+       <div class="modal-content">
+           <h2>Game Rules</h2>
+           <p>Select difficulty, then guess the secret number!</p>
+           <button onclick="hideRules()">Got it!</button>
+       </div>
+   </div>
+
+   <script>
+       let selectedDifficulty = null;
+
+       // Difficulty Select
+       function selectDifficulty(difficulty) {
+           document.querySelectorAll('.difficulty-card').forEach(card => card.classList.remove('selected'));
+           event.currentTarget.classList.add('selected');
+           selectedDifficulty = difficulty;
+       }
+
+       // Showing Rules
+       function showRules() {
+           document.getElementById('rulesModal').style.display = 'block';
+       }
+
+       // Hide Rules
+       function hideRules() {
+           document.getElementById('rulesModal').style.display = 'none';
+       }
+
+       // Start game
+       function startGame() {
+           if (!selectedDifficulty) {
+               alert('Please select a difficulty level first!');
+               return;
+           }
+           // Redirect to game.html with difficulty parameter
+           window.location.href = `game.html?difficulty=${selectedDifficulty}`;
+       }
+   </script>
+</body>
+</html>
